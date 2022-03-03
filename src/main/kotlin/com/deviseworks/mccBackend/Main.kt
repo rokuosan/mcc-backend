@@ -1,4 +1,13 @@
 package com.deviseworks.mccBackend
 
-class Main {
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
+import org.springframework.boot.runApplication
+
+@SpringBootApplication
+@ConfigurationPropertiesScan
+class MinecraftConsoleController
+
+fun main(args: Array<String>){
+    runApplication<MinecraftConsoleController>(*args)
 }
