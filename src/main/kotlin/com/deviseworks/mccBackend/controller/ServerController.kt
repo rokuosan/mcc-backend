@@ -1,7 +1,6 @@
 package com.deviseworks.mccBackend.controller
 
 import com.deviseworks.mccBackend.domain.Memory
-import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
