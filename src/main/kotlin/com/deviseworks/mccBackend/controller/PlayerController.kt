@@ -38,7 +38,12 @@ class PlayerController {
                 onlineList.add(player)
             }
             "quit" ->{
-                onlineList.remove(player)
+                onlineList.mapIndexed { i, p ->
+                    if(p.uuid == player.uuid){
+                        onlineList.removeAt(i)
+                        return
+                    }
+                }
             }
         }
     }
