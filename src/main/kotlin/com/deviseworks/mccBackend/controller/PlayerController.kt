@@ -1,6 +1,8 @@
 package com.deviseworks.mccBackend.controller
 
 import com.deviseworks.mccBackend.domain.Player
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -18,9 +20,10 @@ class PlayerController {
 
     @GetMapping("/api/player/list")
     @ResponseBody
-    fun getPlayerList(): String{
+    fun getPlayerList(): String {
+
         // とりあえずonlineList返しとくか
-        return onlineList.toString()
+        return Json.encodeToString(onlineList)
     }
 
     @PostMapping("/api/player/list/{status}")
