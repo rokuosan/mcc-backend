@@ -16,18 +16,24 @@ repositories {
 }
 
 dependencies {
+    // Kotlin
     implementation(kotlin("stdlib"))
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+    // Test
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
 
-    implementation("org.springframework.boot:spring-boot-starter-data-rest")
-    implementation("org.springframework.boot:spring-boot-starter-security")
-    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+    // Spring boot
+    implementation("org.springframework.boot:spring-boot-starter-data-rest") // REST
+    //implementation("org.springframework.boot:spring-boot-starter-security") // Security
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-    implementation("org.jetbrains.kotlin:kotlin-reflect")
-
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa") // JPA
+    implementation("org.springframework.boot:spring-boot-starter-validation") // Validation
+    runtimeOnly("com.h2database:h2")
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.springframework.security:spring-security-test")
+    //testImplementation("org.springframework.security:spring-security-test")
 }
 
 tasks.getByName<Test>("test") {
