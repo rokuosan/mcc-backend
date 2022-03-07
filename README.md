@@ -52,13 +52,55 @@ $ gradlew bootRun
 
 ### Endpoint
 
-| エンドポイント            | メソッド | 説明                            | パラメータ            |
-|--------------------|------|-------------------------------|------------------|
-| /api/player/list   | GET  | オンラインのプレイヤーを返します。             | offline: Boolean |
-| /api/player/{uuid} | GET  | プレイヤーリストからUUIDをもとにプレイヤーを探します。 | N/A              |
-| /api/player/join   | POST | POSTするJSONにあるプレイヤーを追加します。     | N/A              |
-| /api/player/quit   | POST | オンラインリストからパラメータのプレイヤーを削除します。  | uuid: String     |
-| /api/server/memory | GET  | Return memory status          | N/A              |
+| エンドポイント            | メソッド | 説明                            |
+|--------------------|------|-------------------------------|
+| /api/player/list   | GET  | オンラインのプレイヤーを返します。             |
+| /api/player/{uuid} | GET  | プレイヤーリストからUUIDをもとにプレイヤーを探します。 |
+| /api/player/join   | POST | POSTするJSONにあるプレイヤーを追加します。     |
+| /api/player/quit   | POST | オンラインリストからパラメータのプレイヤーを削除します。  |
+| /api/server/memory | GET  | サーバーのメモリ状況を取得します。             |
 
+### /api/player/list
 
+プレイヤーのリストを返します。
 
+パラメータには``offline``を指定することができ、Bool値を使用します。
+
+以下のように使用することですべてのプレイヤーを表示することができます。
+
+```
+/api/player/list?offline=true
+```
+
+### /api/player
+
+主にプレイヤーに関する内容を扱います。
+
+### /api/player/{uuid}
+
+GET: uuidと一致するUUIDをもつプレイヤーデータを返します。
+POST: uuidと一致するUUIDをもつプレイヤー情報を書き換えます。
+
+### /api/player/join
+
+プラグインが使用します。
+
+プレイヤーが参加した時にPOSTされます。
+
+リクエストボディにはJSON形式のプレイヤーデータがあります。
+
+### /api/player/quit
+
+プラグインが使用します。
+
+プレイヤーが切断したときにPOSTされます。
+
+joinとは異なりリクエストボディには何もありませんが、パラメータにuuidを持ちます。
+
+### /api/server
+
+主にサーバー自体の情報を扱います。
+
+### /api/server/memory
+
+メモリ情報を取得します。
