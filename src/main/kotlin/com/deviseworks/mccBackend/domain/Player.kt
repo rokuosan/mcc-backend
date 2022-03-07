@@ -14,7 +14,7 @@ import javax.persistence.Table
 
 @kotlinx.serialization.Serializable
 @Entity
-@Table(name="players")
+@Table(name="PLAYERS")
 data class Player(
     // UUID
     @Id
@@ -23,19 +23,26 @@ data class Player(
     @SerialName("uuid")
     var uuid: String = "",
 
-    // Name
+    // 名前
     @NotNull
     @SerialName("name")
     @Column(name="name")
     var name: String = "",
 
+    // 表示名
     @SerialName("display_name")
     @Column(name="display_name")
     var displayName: String? = null,
 
+    // 管理者フラグ
     @SerialName("admin_flag")
     @Column(name="admin_flag")
-    var isAdmin: Boolean = false
+    var isAdmin: Boolean? = null,
+
+    // 接続状況
+    @SerialName("status")
+    @Column(name="status")
+    var status: String? = null
 ){
     fun parse(body: String): Player? {
         return Json.decodeFromString(body)
@@ -48,9 +55,16 @@ interface PlayerRepository: JpaRepository<Player, String>
 @Service
 class PlayerService(private val playerRepository: PlayerRepository){
     fun findAll(): List<Player> = playerRepository.findAll()
+    fun getByUUID(uuid: String): Player = playerRepository.getById(uuid)
     fun save(player: Player) = playerRepository.save(player)
     fun delete(player: Player) = playerRepository.delete(player)
-    fun deleteById(uuid: String) = playerRepository.deleteById(uuid)
+    fun deleteByUUId(uuid: String) = playerRepository.deleteById(uuid)
+}
+
+enum class PlayerConnection(val status: String) {
+    ONLINE("ONLINE"),
+    OFFLINE("OFFLINE"),
+    AFK("AFK");
 }
 /*
 Expected JSON Example:
@@ -58,6 +72,7 @@ Expected JSON Example:
     "uuid": "This is UUID v4.",
     "name": "Foo",
     "display_name": "Bar",
-    "admin_flag": false
+    "admin_flag": false,
+    "status": "offline"
 }
  */
