@@ -47,3 +47,18 @@ $ git clone https://github.com/rokuosan/mcc-backend.git
 ```shell
 $ gradlew bootRun
 ```
+
+## Documentation
+
+### Endpoint
+
+| エンドポイント            | メソッド | 説明                            | パラメータ            |
+|--------------------|------|-------------------------------|------------------|
+| /api/player/list   | GET  | オンラインのプレイヤーを返します。             | offline: Boolean |
+| /api/player/{uuid} | GET  | プレイヤーリストからUUIDをもとにプレイヤーを探します。 | N/A              |
+| /api/player/join   | POST | POSTするJSONにあるプレイヤーを追加します。     | N/A              |
+| /api/player/quit   | POST | オンラインリストからパラメータのプレイヤーを削除します。  | uuid: String     |
+| /api/server/memory | GET  | Return memory status          | N/A              |
+
+
+
