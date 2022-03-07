@@ -99,8 +99,6 @@ class PlayerController(
     fun getPlayerByUUID(
         @PathVariable uuid: String
     ): ResponseEntity<String>{
-        val player = Player("null", "null", "null", false, "OFFLINE")
-
         return try{
             ResponseEntity(Json.encodeToString(Player.serializer(), playerService.getByUUID(uuid)), HttpStatus.OK)
         }catch(e: Exception){
