@@ -4,6 +4,9 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.jetbrains.annotations.NotNull
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+import org.springframework.stereotype.Service
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.Id
@@ -39,6 +42,16 @@ data class Player(
     }
 }
 
+@Repository
+interface PlayerRepository: JpaRepository<Player, String>
+
+@Service
+class PlayerService(private val playerRepository: PlayerRepository){
+    fun findAll(): List<Player> = playerRepository.findAll()
+    fun save(player: Player) = playerRepository.save(player)
+    fun delete(player: Player) = playerRepository.delete(player)
+    fun deleteById(uuid: String) = playerRepository.deleteById(uuid)
+}
 /*
 Expected JSON Example:
 {
