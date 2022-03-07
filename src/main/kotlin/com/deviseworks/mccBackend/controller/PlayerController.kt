@@ -5,6 +5,8 @@ import com.deviseworks.mccBackend.domain.PlayerConnection
 import com.deviseworks.mccBackend.domain.PlayerService
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -96,13 +98,13 @@ class PlayerController(
     @ResponseBody
     fun getPlayerByUUID(
         @PathVariable uuid: String
-    ): String{
+    ): ResponseEntity<String>{
         val player = Player("null", "null", "null", false, "OFFLINE")
 
         return try{
-            Json.encodeToString(Player.serializer(), playerService.getByUUID(uuid))
+            ResponseEntity(Json.encodeToString(Player.serializer(), playerService.getByUUID(uuid)), HttpStatus.OK)
         }catch(e: Exception){
-            Json.encodeToString(Player.serializer(), player)
+            ResponseEntity(HttpStatus.NOT_FOUND)
         }
     }
 
