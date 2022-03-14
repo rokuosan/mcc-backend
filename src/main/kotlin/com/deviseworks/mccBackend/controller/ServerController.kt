@@ -2,10 +2,13 @@ package com.deviseworks.mccBackend.controller
 
 import com.deviseworks.mccBackend.domain.Memory
 import com.deviseworks.mccBackend.domain.Order
+import com.deviseworks.mccBackend.domain.PreOrder
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -16,11 +19,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 @RestController
+@CrossOrigin
 class ServerController {
-
-    // Server VM
-    val runtime: Runtime = Runtime.getRuntime()
-
     // Server Orders
     val orderList = mutableListOf<Order>()
 
@@ -56,33 +56,72 @@ class ServerController {
         }
     }
 
-    // /add?command=abc_abc_abc_abc&sender=foo&
+    // /add?command=abc_abc_abc_abc&sender=foo& <- これはカス
+    // /add にbodyでJSON形式でコマンド送ろう
     @PostMapping("/api/server/order/add")
-    fun addOrder(@RequestParam command: String, @RequestParam sender: String): ResponseEntity<String>{
-        // 日付取得
-        val date = Date()
+    fun addOrder(@RequestBody bodyRaw: String): ResponseEntity<String>{
+        val body: PreOrder
 
-        // 命令作成
-        val order = Order(
-            id = orderList.size,
-            senderUUID = sender,
-            command = command,
-            date = SimpleDateFormat("yyyy-MM-dd").format(date),
-            time = SimpleDateFormat("hh:mm:ss").format(date),
-            isDone = false,
-            isCanceled = false
-        )
-
-        // 命令登録
-        for(o in orderList){
-            if(o.id == order.id){
-                return ResponseEntity(HttpStatus.CONFLICT)
-            }
+        // JSONをデシリアライズ
+        try{
+            body = Json.decodeFromString(bodyRaw)
+        }catch(e: Exception){
+            return ResponseEntity(HttpStatus.BAD_REQUEST)
         }
-        orderList.add(order)
 
-        return ResponseEntity(Json.encodeToString(order), HttpStatus.CREATED)
+        // 処理
+        try{
+            val date = Date()
+
+            val order = Order(
+                id = orderList.size,
+                senderUUID = body.sender,
+                command = body.command,
+                date = SimpleDateFormat("yyyy-MM-dd").format(date),
+                time = SimpleDateFormat("hh:mm:ss").format(date),
+                isDone = false,
+                isCanceled = false
+            )
+
+            // 命令登録
+            for(o in orderList){
+                if(o.id == order.id){
+                    return ResponseEntity(HttpStatus.CONFLICT)
+                }
+            }
+            orderList.add(order)
+
+            return ResponseEntity(Json.encodeToString(order), HttpStatus.CREATED)
+
+        }catch(e: Exception){
+            return ResponseEntity(HttpStatus.EXPECTATION_FAILED)
+        }
     }
+//    fun addOrder(@RequestParam command: String, @RequestParam sender: String): ResponseEntity<String>{
+//        // 日付取得
+//        val date = Date()
+//
+//        // 命令作成
+//        val order = Order(
+//            id = orderList.size,
+//            senderUUID = sender,
+//            command = command,
+//            date = SimpleDateFormat("yyyy-MM-dd").format(date),
+//            time = SimpleDateFormat("hh:mm:ss").format(date),
+//            isDone = false,
+//            isCanceled = false
+//        )
+//
+//        // 命令登録
+//        for(o in orderList){
+//            if(o.id == order.id){
+//                return ResponseEntity(HttpStatus.CONFLICT)
+//            }
+//        }
+//        orderList.add(order)
+//
+//        return ResponseEntity(Json.encodeToString(order), HttpStatus.CREATED)
+//    }
 
     // /cancel?id=111
     @PostMapping("/api/server/order/cancel")
