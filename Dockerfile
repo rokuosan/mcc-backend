@@ -4,7 +4,7 @@ RUN ["mkdir", "-p", "/app"]
 WORKDIR /app
 
 COPY . /app/
-RUN ["chmod", "766", "./gradlew"]
+RUN ["chmod", "777", "./gradlew"]
 RUN ["./gradlew", "build"]
 
 EXPOSE 8080
