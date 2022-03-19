@@ -1,12 +1,11 @@
-FROM amazoncorretto:11.0.14
+FROM gradle:jdk11
 
 RUN ["mkdir", "-p", "/app"]
 WORKDIR /app
 
 COPY . /app/
-RUN ["chmod", "777", "./gradlew"]
-RUN ["./gradlew", "build"]
+RUN ["gradle", "build"]
 
 EXPOSE 8080
 
-CMD ["./gradlew", "bootRun"]
+CMD ["gradle", "bootRun"]
