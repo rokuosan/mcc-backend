@@ -4,7 +4,6 @@ RUN ["mkdir", "-p", "/app"]
 WORKDIR /app
 
 COPY . /app/
-RUN ["gradle", "build"]
 
 EXPOSE 8080
 
